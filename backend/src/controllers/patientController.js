@@ -1,34 +1,7 @@
-const patients = [
-  {
-    id: 1,
-    first_name: "Alice",
-    last_name: "Martin",
-    birth_date: "1990-04-12",
-    gender: "F",
-    email: "alice@example.com",
-    phone: "0600000000"
-  },
-  {
-    id: 2,
-    first_name: "Bob",
-    last_name: "Durand",
-    birth_date: "1985-09-22",
-    gender: "M",
-    email: "bob@example.com",
-    phone: "0611111111"
-  },
-  {
-    id: 3,
-    first_name: "Charline",
-    last_name: "Durand",
-    birth_date: "1986-10-02",
-    gender: "F",
-    email: "charline@example.com",
-    phone: "0611111112"
-  }
-];
+import * as patientService from "../services/patientService.js";
 
 export const getPatients = (req, res) => {
+    const patients = patientService.getAllPatients();
     res.json(patients);
 };
 
@@ -40,8 +13,8 @@ export const getPatientById = (req, res) => {
             message: "Invalid patient id"
         });
     }
-    
-    const patient = patients.find(p => p.id === id);
+
+    const patient = patientService.getPatientById(id);
 
     if (!patient) {
         return res.status(404).json({
@@ -54,7 +27,7 @@ export const getPatientById = (req, res) => {
 
 export const getPatientByName = (req, res) => {
     const firstname = req.params.name;
-    const patient = patients.find(p => p.first_name == firstname);
+    const patient = patientService.getPatientByName(firstname);
 
 
     if (!patient) {
@@ -67,5 +40,40 @@ export const getPatientByName = (req, res) => {
 };
 
 export const getPatientsQuantity = (req, res) => {
+    const patients = patientService.getAllPatients();
     res.json(patients.length);
-}
+};
+
+export const createPatient = (req, res) => {
+    const patient = patientService.createPatient(req.body);
+
+    res.status(201).json(patient);
+};
+
+export const updatePatient = (req, res) => {
+    console.log(req.body);
+    const id = parseInt(req.params.id);
+
+    const patient = patientService.updatePatient(id, req.body);
+
+    if (!patient) {
+        return res.status(404).json({
+            message: "Patient not found"
+        });
+    }
+    res.json(patient);
+};
+
+export const deletePatient = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    const deleted = patientService.deletePatient(id);
+
+    if (!deleted) {
+        return res.status(404).json({
+            message: "Patient not found"
+        });
+    }
+
+    res.status(204).send();
+};
