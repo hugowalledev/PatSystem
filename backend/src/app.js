@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 
-import patientRoutes from "./routes/patientRoutes.js"
+import "./config/db.js";
+import patientRoutes from "./routes/patientRoutes.js";
 
 const app = express();
 

@@ -1,3 +1,5 @@
+import db from "../config/db.js";
+/*
 let patients = [
     {
     id: 1,
@@ -30,51 +32,140 @@ let patients = [
     medical_note: "hypocondriaque"
   }
 ]
-
+*/
 export const findAll = () => {
-    return patients;
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM patients", [], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
 };
 
 export const findById = (id) => {
-    return patients.find(p => p.id === id);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM patients WHERE id = ?", [id], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
 };
 
 export const findByName = (name) => {
-    return patients.find(p => p.first_name === name);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM patients WHERE first_name = ?", [name], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
 };
 
 export const create = (patientData) => {
-    const newPatient = {
-        id: patients.length + 1,
-        ...patientData
-    };
-
-    patients.push(newPatient);
-    return newPatient;
+    const {
+        first_name,
+        last_name,
+        birth_date,
+        gender,
+        email,
+        phone,
+        medical_note
+    } = patientData;
+    
+    return new Promise((resolve, reject) => {
+        const sql = `
+            INSERT INTO patients (
+            first_name, last_name, birth_date, gender, email, phone, medical_note
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        `;
+        
+        db.run(
+            sql,
+            [first_name, last_name, birth_date, gender, email, phone, medical_note],
+            function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve({
+                        id: this.lastID,
+                        first_name,
+                        last_name,
+                        birth_date,
+                        gender,
+                        email,
+                        phone,
+                        medical_note
+                    });
+                }
+            }
+        );
+    });
 };
 
 export const update = (id, patientData) => {
-    const index = patients.findIndex(p => p.id === id);
+    return new Promise((resolve, reject) => {
+        db.get("SELECT * FROM patients WHERE id = ?", [id], (err, existingPatient) => {
+            if (err) {
+                reject(err);
+                return;
+            }
 
-    if (index === -1) {
-        return null;
-    }
+            if (!existingPatient) {
+                resolve(null);
+                return;
+            }
 
-    patients[index] = {
-        ...patients[index],
-        ...patientData
-    };
+            const updatedPatient = {
+                ...existingPatient,
+                ...patientData
+            };
 
-    return patients[index];
+            const sql = `
+                UPDATE patients
+                SET first_name = ?, last_name = ?, birth_date = ?, gender = ?, email = ?, phone = ?, medical_note = ?
+                WHERE id = ?
+            `;
+
+            db.run(
+                sql,
+                [
+                    updatedPatient.first_name,
+                    updatedPatient.last_name,
+                    updatedPatient.birth_date,
+                    updatedPatient.gender,
+                    updatedPatient.email,
+                    updatedPatient.phone,
+                    updatedPatient.medical_note,
+                    id
+                ],
+                function (updateErr) {
+                    if (updateErr) {
+                        reject(updateErr);
+                    } else {
+                        resolve(updatedPatient);
+                    }
+                }
+            );
+        });
+    });
 };
 
 export const remove = (id) => {
-    const index= patients.findIndex(p => p.id === id);
-
-    if (index === -1) {
-        return false;
-    }
-
-    patients.splice(index, 1);
-    return true;
+    return new Promise((resolve, reject) => {
+        db.run("DELETE FROM patients WHERE id = ?", [id], function (err) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(this.changes > 0);
+            }
+        });
+    });
 };

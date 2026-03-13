@@ -1,12 +1,12 @@
 import * as patientService from "../services/patientService.js";
 
-export const getPatients = (req, res) => {
-    const patients = patientService.getAllPatients();
+export const getPatients = async (req, res) => {
+    const patients = await patientService.getAllPatients();
     res.json(patients);
 };
 
-export const getPatientById = (req, res) => {
-    const id = parseInt(req.params.id);
+export const getPatientById = async (req, res) => {
+    const id = parseInt(req.params.id, 10);
 
     if (isNaN(id)){
         return res.status(400).json({
@@ -14,7 +14,7 @@ export const getPatientById = (req, res) => {
         });
     }
 
-    const patient = patientService.getPatientById(id);
+    const patient = await patientService.getPatientById(id);
 
     if (!patient) {
         return res.status(404).json({
@@ -25,9 +25,9 @@ export const getPatientById = (req, res) => {
     res.json(patient);
 };
 
-export const getPatientByName = (req, res) => {
+export const getPatientByName = async (req, res) => {
     const firstname = req.params.name;
-    const patient = patientService.getPatientByName(firstname);
+    const patient = await patientService.getPatientByName(firstname);
 
 
     if (!patient) {
@@ -39,22 +39,21 @@ export const getPatientByName = (req, res) => {
     res.json(patient);
 };
 
-export const getPatientsQuantity = (req, res) => {
-    const patients = patientService.getAllPatients();
+export const getPatientsQuantity = async (req, res) => {
+    const patients = await patientService.getAllPatients();
     res.json(patients.length);
 };
 
-export const createPatient = (req, res) => {
-    const patient = patientService.createPatient(req.body);
+export const createPatient = async (req, res) => {
+    const patient = await patientService.createPatient(req.body);
 
     res.status(201).json(patient);
 };
 
-export const updatePatient = (req, res) => {
-    console.log(req.body);
-    const id = parseInt(req.params.id);
+export const updatePatient = async (req, res) => {
+    const id = parseInt(req.params.id, 10);
 
-    const patient = patientService.updatePatient(id, req.body);
+    const patient = await patientService.updatePatient(id, req.body);
 
     if (!patient) {
         return res.status(404).json({
@@ -64,10 +63,10 @@ export const updatePatient = (req, res) => {
     res.json(patient);
 };
 
-export const deletePatient = (req, res) => {
-    const id = parseInt(req.params.id);
+export const deletePatient = async (req, res) => {
+    const id = parseInt(req.params.id, 10);
 
-    const deleted = patientService.deletePatient(id);
+    const deleted = await patientService.deletePatient(id);
 
     if (!deleted) {
         return res.status(404).json({

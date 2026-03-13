@@ -1,25 +1,25 @@
 import * as patientRepository from "../repositories/patientRepository.js";
 
-export const getAllPatients = () => {
-    return patientRepository.findAll();
+export const getAllPatients = async () => {
+    return await patientRepository.findAll();
 };
 
-export const getPatientById = (id) => {
-    return patientRepository.findById(id);
+export const getPatientById = async (id) => {
+    return await patientRepository.findById(id);
 }
 
-export const getPatientByName = (name) => {
-    return patientRepository.findByName(name);
+export const getPatientByName = async (name) => {
+    return await patientRepository.findByName(name);
 };
 
-export const createPatient = (data) => {
-    return patientRepository.create(data);
+export const createPatient = async (data) => {
+    return await patientRepository.create(data);
 };
 
-export const updatePatient =(id, data) => {
-    return patientRepository.update(id, data);
+export const updatePatient = async (id, data) => {
+    return await patientRepository.update(id, data);
 };
 
-export const deletePatient = (id) => {
-    return patientRepository.remove(id);
+export const deletePatient = async (id) => {
+    return await patientRepository.remove(id);
 };
