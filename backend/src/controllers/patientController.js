@@ -1,28 +1,29 @@
 import * as patientService from "../services/patientService.js";
+import ApiError from "../utils/ApiError.js";
 
 export const getPatients = async (req, res) => {
     const patients = await patientService.getAllPatients();
     res.json(patients);
 };
 
-export const getPatientById = async (req, res) => {
-    const id = parseInt(req.params.id, 10);
+export const getPatientById = async (req, res, next) => {
+    try{
+        const id = parseInt(req.params.id, 10);
 
-    if (isNaN(id)){
-        return res.status(400).json({
-            message: "Invalid patient id"
-        });
+        if (isNaN(id)){
+            throw new ApiError(400, "Invalid patient Id");
+        }
+        
+        const patient = await patientService.getPatientById(id);
+
+        if (!patient) {
+            throw new ApiError(404, "Patient not found");
+        }
+        
+        res.json(patient);
+    } catch (error) {
+        next(error);
     }
-
-    const patient = await patientService.getPatientById(id);
-
-    if (!patient) {
-        return res.status(404).json({
-            message: "Patient not found"
-        });
-    }
-    
-    res.json(patient);
 };
 
 export const getPatientByName = async (req, res) => {

@@ -1,38 +1,5 @@
 import db from "../config/db.js";
-/*
-let patients = [
-    {
-    id: 1,
-    first_name: "Alice",
-    last_name: "Martin",
-    birth_date: "1990-04-12",
-    gender: "F",
-    email: "alice@example.com",
-    phone: "0600000000",
-    medical_note: "Suivi annuel"
-  },
-  {
-    id: 2,
-    first_name: "Bob",
-    last_name: "Durand",
-    birth_date: "1985-09-22",
-    gender: "M",
-    email: "bob@example.com",
-    phone: "0611111111",
-    medical_note: "Allergie déclarée à la pénicilline"
-  },
-  {
-    id: 3,
-    first_name: "Charline",
-    last_name: "Durand",
-    birth_date: "1986-10-02",
-    gender: "F",
-    email: "charline@example.com",
-    phone: "0611111112",
-    medical_note: "hypocondriaque"
-  }
-]
-*/
+
 export const findAll = () => {
     return new Promise((resolve, reject) => {
         db.all("SELECT * FROM patients", [], (err, rows) => {
@@ -47,7 +14,7 @@ export const findAll = () => {
 
 export const findById = (id) => {
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM patients WHERE id = ?", [id], (err, rows) => {
+        db.get("SELECT * FROM patients WHERE id = ?", [id], (err, rows) => {
             if (err) {
                 reject(err);
             } else {
@@ -59,7 +26,7 @@ export const findById = (id) => {
 
 export const findByName = (name) => {
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM patients WHERE first_name = ?", [name], (err, rows) => {
+        db.get("SELECT * FROM patients WHERE first_name = ?", [name], (err, rows) => {
             if (err) {
                 reject(err);
             } else {
