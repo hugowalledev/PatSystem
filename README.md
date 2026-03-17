@@ -1,20 +1,48 @@
-# Mini Dossier Patient
+# Mini Patient Management App
 
-Mini projet fullstack pour apprendre Node.js / Express / Vue.js dans le cadre d'une préparation à un entretien technique.
+Fullstack application built with Node.js (Express) and Vue 3.
 
-## Stack
-- Backend : Node.js, Express
-- Frontend : Vue.js (à venir)
-- Base de données : SQLite ou PostgreSQL (à venir)
+## Features
 
-## Fonctionnalités prévues
-- Lister les patients
-- Afficher le détail d’un patient
-- Ajouter un patient
-- Modifier un patient
-- Supprimer un patient
+- List patients
+- Create patient
+- Update patient
+- Delete patient
+- View patient details
 
-## Lancement du backend
+## Tech Stack
+
+### Backend
+- Node.js
+- Express
+- SQLite
+- REST API
+- Layered architecture (Controller / Service / Repository)
+- Centralized error handling
+
+### Frontend
+- Vue 3
+- Vite
+- Vue Router
+- Fetch API
+
+## Project Structure
+
+backend/
+- controllers
+- services
+- repositories
+- routes
+
+frontend/
+- components
+- views
+- router
+- api
+
+## Installation
+
+### Backend
 
 ```bash
 cd backend
