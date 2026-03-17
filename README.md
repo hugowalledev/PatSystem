@@ -1,4 +1,4 @@
-# Mini Patient Management App
+#Patient Management App
 
 Fullstack application built with Node.js (Express) and Vue 3.
 
